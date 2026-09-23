@@ -14,3 +14,4 @@
 @media(min-width:681px) and (max-width:850px){.hero{grid-template-columns:1fr;align-items:start;gap:40px}.hero-note{max-width:580px}.hero h1{font-size:68px}.note-top{white-space:nowrap}}
 .site-header nav{flex-wrap:wrap}.site-header nav a{white-space:nowrap}.footer-bottom>div{flex-wrap:wrap}
 
+.professional-intro{padding-top:10px;padding-bottom:70px}.professional-intro h2{font-size:clamp(34px,4vw,48px);margin-bottom:28px}.professional-intro-copy{max-width:900px}.professional-intro-copy>p{margin-bottom:20px;line-height:1.85}.professional-intro-copy strong{color:var(--foreground)}.professional-intro-copy .notice{line-height:1.8}.professional-intro-copy .text-link{margin-top:4px}
