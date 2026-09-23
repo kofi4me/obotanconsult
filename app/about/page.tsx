@@ -12,7 +12,7 @@ export default function AboutUs() {
       <h1>Research with depth.<br />Writing with purpose.</h1>
       <p className="lead">Obotan Consult helps individuals and organizations present their experience, ideas and supporting documents clearly through research and writing support.</p>
       <h2>Who we are</h2>
-      <p>Obotan Consult is a non-attorney immigration consultant offering CV and document review, research and petition writing support for individuals exploring EB1A, EB1B and EB2 National Interest Waiver (NIW). We also support business plan development, business documents and policy documents.</p>
+      <p>Based in Cincinnati, Ohio, USA, Obotan Consult is a non-attorney immigration consultant offering CV and document review, research and petition writing support for individuals exploring EB1A, EB1B and EB2 National Interest Waiver (NIW). We also support business plan development, business documents and policy documents.</p>
       <p>Our role is to help organize client-provided information and communicate it clearly. A 40-minute consultation provides an opportunity to discuss your materials and the scope of research or writing assistance you need.</p>
       <aside className="notice" aria-label="Important non-attorney disclaimer">
         <strong>All immigration services provided by Obotan Consult are non-attorney services. Anyone requiring legal advice must contact a qualified, licensed immigration attorney.</strong>
@@ -34,3 +34,4 @@ export default function AboutUs() {
     </main>
   );
 }
+
