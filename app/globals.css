@@ -12,3 +12,5 @@
 @media(max-width:780px){.intake-layout{grid-template-columns:1fr}.intake-aside{display:grid;grid-template-columns:1fr 1fr;gap:25px}.admin-detail-grid{grid-template-columns:1fr}.submission-row{flex-wrap:wrap}.submission-time{margin-left:52px}.admin-heading{align-items:start}.admin-heading h1{font-size:38px}}
 @media(max-width:500px){.intake-aside{grid-template-columns:1fr}.steps{gap:10px}.steps li{flex-direction:column;align-items:start;font-size:12px}.time-grid{grid-template-columns:repeat(2,1fr)}.review-summary dl>div,.client-details>div{grid-template-columns:1fr;gap:2px}.form-actions>.cta{width:100%}.admin-heading{flex-direction:column}.submission-time{margin-left:0}.submission-person{min-width:60%}.admin-toolbar{align-items:start;flex-direction:column}.booking-success h2{font-size:34px}}
 @media(min-width:681px) and (max-width:850px){.hero{grid-template-columns:1fr;align-items:start;gap:40px}.hero-note{max-width:580px}.hero h1{font-size:68px}.note-top{white-space:nowrap}}
+.site-header nav{flex-wrap:wrap}.site-header nav a{white-space:nowrap}.footer-bottom>div{flex-wrap:wrap}
+
