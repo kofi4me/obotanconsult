@@ -8,6 +8,11 @@ const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
   "00000000-0000-4000-8000-000000000000";
 
 const { d1 } = hostingConfig;
+// Set these in Cloudflare Workers Builds variables for the standalone deployment.
+const cloudflareDatabaseId = process.env.CLOUDFLARE_D1_DATABASE_ID?.trim();
+if (cloudflareDatabaseId && (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cloudflareDatabaseId) || cloudflareDatabaseId === SITE_CREATOR_PLACEHOLDER_DATABASE_ID)) {
+  throw new Error("CLOUDFLARE_D1_DATABASE_ID must be your real Cloudflare D1 Database ID.");
+}
 
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
@@ -20,8 +25,8 @@ const localBindingConfig = {
     ? [
         {
           binding: d1,
-          database_name: "site-creator-d1",
-          database_id: SITE_CREATOR_PLACEHOLDER_DATABASE_ID,
+          database_name: cloudflareDatabaseId ? "obotanconsult-db" : "site-creator-d1",
+          database_id: cloudflareDatabaseId || SITE_CREATOR_PLACEHOLDER_DATABASE_ID,
         },
       ]
     : [],
@@ -59,3 +64,4 @@ export default defineConfig(async () => {
     ],
   };
 });
+
