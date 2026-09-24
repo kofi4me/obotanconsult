@@ -1,3 +1,4 @@
+import { env } from "cloudflare:workers";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -19,6 +20,8 @@ const SIGN_OUT_PATH = "/signout-with-chatgpt";
 const CALLBACK_PATH = "/callback";
 
 export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
+  // Sites identity headers must never authenticate a standalone public Worker.
+  if (Reflect.get(env, "AUTH_PROVIDER") === "cloudflare-pending") return null;
   const requestHeaders = await headers();
   const userId = requestHeaders.get(USER_ID_HEADER);
   const email = requestHeaders.get(USER_EMAIL_HEADER);
@@ -88,3 +91,4 @@ function safeDecodeURIComponent(value: string): string | null {
     return null;
   }
 }
+

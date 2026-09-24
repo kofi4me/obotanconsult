@@ -1,12 +1,17 @@
-# Standalone Cloudflare database setup
+# Cloudflare deployment
 
-The Sites preview database ID is a local placeholder. It must not be used in your own Cloudflare account.
+Database: obotanconsult-db
+Database ID: 949590fb-70b3-45cd-b424-fdda920fedea
+Worker name: obotanconsult
 
-1. Create a D1 database named `obotanconsult-db` in the same account as the `obotanconsult` Worker.
-2. Set the Workers **Build** variable `CLOUDFLARE_D1_DATABASE_ID` to that database's actual UUID. This must be available to `npm run build`; setting only a runtime variable is insufficient.
-3. In the new database's Console, execute the schema from `drizzle/0000_vengeful_richard_fisk.sql` once. This creates the bookings and rate-limit tables and indexes. Do not replay it on a database whose tables already exist.
-4. Rebuild the latest GitHub revision. The generated `dist/server/wrangler.json` must contain your real UUID for binding `DB` and zero R2 bindings.
+Cloudflare Workers Builds settings:
+- Build command: npm run build
+- Deploy command: npm run deploy:cloudflare
 
-Existing Sites data is not automatically migrated into the new database.
+The deploy command applies tracked D1 migrations, then deploys the Worker. The build/deploy token needs access to this database. If tables were already created manually, reconcile the migration history before applying migrations; do not delete existing data.
 
-Standalone admin authentication must be configured before the raw Worker is opened for clients. The current ChatGPT authentication headers are trusted only behind the Sites dispatcher; they are not a standalone Cloudflare authentication mechanism. Database setup alone does not complete the hosting migration.
+No R2 subscription or bucket is required. CVs are sent by the client using their email app after booking.
+
+Standalone admin access is deliberately disabled pending Cloudflare authentication setup. Sites identity headers cannot be trusted on a public Worker. The website must not be considered fully migrated until admin authentication is configured and tested.
+
+For the existing Sites-hosted version, build with OBOTAN_HOSTING=sites. It retains its own platform-managed DB and authentication. Existing Sites bookings do not automatically migrate into this database.

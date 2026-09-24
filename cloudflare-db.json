@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "obotanconsult",
+  "compatibility_date": "2026-05-15",
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "obotanconsult-db",
+    "database_id": "949590fb-70b3-45cd-b424-fdda920fedea",
+    "migrations_dir": "drizzle"
+  }]
+}

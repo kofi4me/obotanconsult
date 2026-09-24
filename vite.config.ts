@@ -1,6 +1,7 @@
 import vinext from "vinext";
 import { defineConfig } from "vite";
 import hostingConfig from "./.openai/hosting.json";
+import databaseConfig from "./cloudflare-db.json";
 import { readExecutionProfile } from "./scripts/execution-profile.mjs";
 import { sites } from "./build/sites-vite-plugin";
 
@@ -9,7 +10,8 @@ const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
 
 const { d1 } = hostingConfig;
 // Set these in Cloudflare Workers Builds variables for the standalone deployment.
-const cloudflareDatabaseId = process.env.CLOUDFLARE_D1_DATABASE_ID?.trim();
+const useSitesHosting = process.env.OBOTAN_HOSTING === "sites";
+const cloudflareDatabaseId = useSitesHosting ? undefined : (process.env.CLOUDFLARE_D1_DATABASE_ID?.trim() || databaseConfig.d1_databases[0].database_id);
 if (cloudflareDatabaseId && (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cloudflareDatabaseId) || cloudflareDatabaseId === SITE_CREATOR_PLACEHOLDER_DATABASE_ID)) {
   throw new Error("CLOUDFLARE_D1_DATABASE_ID must be your real Cloudflare D1 Database ID.");
 }
@@ -19,6 +21,8 @@ const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 const managedLinux = readExecutionProfile() === "managed-linux";
 
 const localBindingConfig = {
+  name: useSitesHosting ? "site-creator-vinext-starter" : "obotanconsult",
+  vars: { AUTH_PROVIDER: useSitesHosting ? "sites" : "cloudflare-pending" },
   main: "vinext/server/fetch-handler",
   compatibility_flags: ["nodejs_compat"],
   d1_databases: d1
@@ -64,4 +68,5 @@ export default defineConfig(async () => {
     ],
   };
 });
+
 
