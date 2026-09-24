@@ -1,6 +1,7 @@
 import {env} from "cloudflare:workers";
 import {getChatGPTUser} from "@/app/chatgpt-auth";
-export const ADMIN_EMAIL="obotanconsult@gmail.com";
+import {ADMIN_EMAIL} from "@/lib/cloudflare-access";
+export {ADMIN_EMAIL};
 export function database(){if(!env.DB)throw new Error("Database unavailable");return env.DB}
 export async function isAdmin(){const user=await getChatGPTUser();return !!user&&user.email.trim().toLowerCase()===ADMIN_EMAIL}
 export function json(data:unknown,status=200){return Response.json(data,{status,headers:{"Cache-Control":"no-store","X-Content-Type-Options":"nosniff"}})}

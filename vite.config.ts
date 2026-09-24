@@ -22,7 +22,8 @@ const managedLinux = readExecutionProfile() === "managed-linux";
 
 const localBindingConfig = {
   name: useSitesHosting ? "site-creator-vinext-starter" : "obotanconsult",
-  vars: { AUTH_PROVIDER: useSitesHosting ? "sites" : "cloudflare-pending" },
+  vars: { AUTH_PROVIDER: useSitesHosting ? "sites" : "cloudflare" },
+  keep_vars: true,
   main: "vinext/server/fetch-handler",
   compatibility_flags: ["nodejs_compat"],
   d1_databases: d1

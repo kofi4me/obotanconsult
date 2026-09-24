@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {generateKeyPair,SignJWT,createLocalJWKSet,exportJWK} from 'jose';
+import {accessConfig,accessToken,verifyAccessToken} from '../lib/cloudflare-access.ts';
+const cfg=accessConfig('obotan-test.cloudflareaccess.com','test-audience');assert(cfg);
+for(const domain of ['https://evil.example','http://test.cloudflareaccess.com','https://test.cloudflareaccess.com/other','https://test.cloudflareaccess.com?x=1'])assert.equal(accessConfig(domain,'aud'),null);
+assert.equal(accessConfig(undefined,'aud'),null);
+const {publicKey,privateKey}=await generateKeyPair('RS256');const jwk=await exportJWK(publicKey);jwk.kid='test';const key=createLocalJWKSet({keys:[jwk]});
+const sign=(email='obotanconsult@gmail.com',aud=cfg.audience,iss=cfg.issuer,exp='5m')=>new SignJWT({email}).setProtectedHeader({alg:'RS256',kid:'test'}).setSubject('admin-test').setIssuedAt().setExpirationTime(exp).setAudience(aud).setIssuer(iss).sign(privateKey);
+assert.equal((await verifyAccessToken(await sign(),cfg,key))?.email,'obotanconsult@gmail.com');
+for(const token of [await sign('other@example.com'),await sign(undefined,'wrong'),await sign(undefined,undefined,'https://wrong.cloudflareaccess.com'),await sign(undefined,undefined,undefined,'-1s'),'forged.token.value'])assert.equal(await verifyAccessToken(token,cfg,key),null);
+const {privateKey:badKey}=await generateKeyPair('RS256');const forged=await new SignJWT({email:'obotanconsult@gmail.com'}).setProtectedHeader({alg:'RS256',kid:'test'}).setSubject('x').setIssuedAt().setExpirationTime('5m').setAudience(cfg.audience).setIssuer(cfg.issuer).sign(badKey);assert.equal(await verifyAccessToken(forged,cfg,key),null);
+assert.equal(accessToken(new Headers({'oai-authenticated-user-email':'obotanconsult@gmail.com'})),null);
+assert.equal(accessToken(new Headers({cookie:'other=1; CF_Authorization=token'})),'token');
+console.log('PASS: valid admin, wrong email/audience/issuer, expiry, forged signatures, config validation and token sources');
