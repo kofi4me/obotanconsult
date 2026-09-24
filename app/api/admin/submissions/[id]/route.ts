@@ -1,4 +1,4 @@
-import {database,bucket,isAdmin,json,sameOrigin,limitedBody} from "@/lib/server";
+import {database,isAdmin,json,sameOrigin,limitedBody} from "@/lib/server";
 export const dynamic="force-dynamic";
 export async function PATCH(request:Request,{params}:{params:Promise<{id:string}>}){
  if(!await isAdmin())return json({error:"Admin access required."},403);if(!sameOrigin(request))return json({error:"Invalid request origin."},403);
@@ -10,5 +10,5 @@ export async function PATCH(request:Request,{params}:{params:Promise<{id:string}
 }
 export async function DELETE(request:Request,{params}:{params:Promise<{id:string}>}){
  if(!await isAdmin())return json({error:"Admin access required."},403);if(!sameOrigin(request))return json({error:"Invalid request origin."},403);
- try{const {id}=await params;const r=await database().prepare("SELECT file_key FROM submissions WHERE id=?").bind(id).first<{file_key:string|null}>();if(!r)return json({error:"Record not found."},404);if(r.file_key)await bucket().delete(r.file_key);await database().prepare("DELETE FROM submissions WHERE id=?").bind(id).run();return json({deleted:true})}catch{return json({error:"Deletion could not be completed. Please retry."},503)}
+ try{const {id}=await params;const r=await database().prepare("SELECT file_key FROM submissions WHERE id=?").bind(id).first<{file_key:string|null}>();if(!r)return json({error:"Record not found."},404);await database().prepare("DELETE FROM submissions WHERE id=?").bind(id).run();return json({deleted:true})}catch{return json({error:"Deletion could not be completed. Please retry."},503)}
 }

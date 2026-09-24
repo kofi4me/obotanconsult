@@ -16,5 +16,5 @@ export const services: Service[] = [
  {title:"National Interest Waiver factors",description:"Tick the areas for which you have evidence to discuss. All three factors matter; these are not interchangeable.",items:["My proposed endeavor has substantial merit and national importance","My background and progress position me to advance the endeavor","On balance, waiving the job-offer and labor-certification requirements would benefit the United States"]}]}];
 export function findService(slug:string){return services.find(s=>s.slug===slug)}
 export function evidenceOptions(service:Service){return service.groups.flatMap((g,gi)=>g.items.map((label,i)=>({id:`${gi}-${i}`,label,group:g.title})))}
-export const DISCLOSURE_VERSION="2026-09-23-v2";
+export const DISCLOSURE_VERSION="2026-09-23-v3-email";
 

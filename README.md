@@ -4,18 +4,18 @@ Public, account-free client intake with a protected admin workspace for obotanco
 
 ## Included
 - Home, Business Docs, EB1A, EB1B and EB2 NIW pages.
-- Self-reported evidence checklists, CV PDF upload (5 MB maximum), consent and contact details.
+- Self-reported evidence checklists, post-booking CV email links, consent and contact details.
 - 40-minute bookings: Wednesday and Thursday 18:00–22:00; Saturday 09:00–12:00. America/New_York applies Eastern daylight-saving changes. Slots end within office hours and are available eight weeks ahead.
-- D1 booking records and server-only R2 documents, atomic reservation uniqueness, bounded uploads and submission rate limiting.
-- Admin review, internal notes, statuses, cancellation, document download and record deletion. Every admin endpoint checks the signed-in email server-side.
+- D1 booking records, no R2 dependency, atomic reservation uniqueness, bounded form bodies and submission rate limiting.
+- Admin review, internal notes, statuses, cancellation and record deletion. Every admin endpoint checks the signed-in email server-side.
 - Clear non-attorney disclosures throughout. No eligibility scores, legal advice, representation or filing.
 
 ## Operation
-Clients receive an on-screen confirmation and an optional calendar download. Obotan must contact clients with meeting details. No email delivery, video meeting provider, payments or external calendar integration is configured.
+Clients receive an on-screen confirmation and an optional calendar download. Obotan must contact clients with meeting details. Prefilled mailto links include the service, client name and booking reference. No automatic email delivery, video meeting provider, payments or external calendar integration is configured.
 
 Admin sign-in uses the hosting platform's ChatGPT identity. Sign in with the account whose email is obotanconsult@gmail.com. The production dispatcher owns authentication headers; never expose the raw Worker as an independent public origin without equivalent header validation.
 
-For privacy requests, use the admin deletion action after verifying the requester. No automatic retention schedule is configured. PDF signature, size and extension are checked; files are downloaded as attachments and are not rendered or processed by an AI service.
+For privacy requests, use the admin deletion action after verifying the requester. No automatic retention schedule is configured. Clients manually attach documents in their email app and send them to obotanconsult@gmail.com. Email receipt is not tracked by the website. Deleting a booking does not delete emailed documents. Legacy file columns remain for schema compatibility; existing stored objects are not deleted by this change.
 
 ## Development and verification
 - Install: npm run install:ci
@@ -34,3 +34,4 @@ The API tests inject platform headers solely into a loopback test Worker. They m
 - USCIS EB2/NIW: https://www.uscis.gov/policy-manual/volume-6-part-f-chapter-5
 
 Checklists are general information, not exhaustive legal advice. Content and service-scope version: 2026-09-23.
+
