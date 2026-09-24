@@ -1,10 +1,12 @@
-import {getChatGPTUser,chatGPTSignInPath,chatGPTSignOutPath,usesCloudflareAccess,getAccessConfig} from "@/app/chatgpt-auth";
-import {ADMIN_EMAIL} from "@/lib/server";
-import {AdminWorkspace} from "@/components/admin-workspace";
-import {Button} from "@/components/ui/button";
-import {LockKeyhole} from "lucide-react";
-export const dynamic="force-dynamic";
-export default async function Admin(){const cloudflare=usesCloudflareAccess();if(cloudflare&&!getAccessConfig())return <main id="main" className="wrap page-top"><div className="admin-login panel"><LockKeyhole size={32}/><p className="eyebrow">OBOTAN CONSULT / PRIVATE WORKSPACE</p><h1>Admin setup in progress</h1><p className="lead">This is the Cloudflare admin page. Secure email sign-in for obotanconsult@gmail.com is awaiting Cloudflare Access configuration.</p><p className="micro">Client bookings remain available. Admin records stay protected while setup is completed.</p></div></main>;const user=await getChatGPTUser();const allowed=user?.email.trim().toLowerCase()===ADMIN_EMAIL;
- if(!allowed)return <main id="main" className="wrap page-top"><div className="admin-login panel"><LockKeyhole size={32}/><p className="eyebrow">OBOTAN CONSULT / PRIVATE WORKSPACE</p><h1>Admin access</h1><p className="lead">Sign in to view client requests, meeting reservations, contact details and supporting checklists.</p>{user?<div className="notice">This account does not have admin access. Sign out and use the designated Obotan account.</div>:<p className="micro">Only Obotan’s designated administrator can access this workspace. Use your designated administrator identity to continue.</p>}<div className="hero-actions"><Button asChild className="cta"><a href={user?chatGPTSignOutPath("/admin"):chatGPTSignInPath("/admin")} target="_top">{user?"Sign out":cloudflare?"Sign in with Cloudflare Access":"Admin sign in with ChatGPT"}</a></Button></div></div></main>;
- return <main id="main" className="wrap page-top"><div className="admin-heading"><div><p className="eyebrow">OBOTAN CONSULT / ADMIN</p><h1>Client requests & reservations.</h1><p className="lead">Manage meeting reservations, review client details and checklists, and keep track of follow-up.</p></div><a className="text-link" href={chatGPTSignOutPath("/admin")} target="_top">Sign out</a></div><AdminWorkspace/></main>;
+import {getChatGPTUser,chatGPTSignInPath,chatGPTSignOutPath,usesStandaloneAuth} from '@/app/chatgpt-auth';
+import {passwordHash} from '@/lib/admin-session';
+import {ADMIN_EMAIL} from '@/lib/server';
+import {AdminWorkspace} from '@/components/admin-workspace';
+import {AdminLogin,AdminLogout} from '@/components/admin-login';
+export const dynamic='force-dynamic';
+export default async function Admin(){
+ const standalone=usesStandaloneAuth();
+ const user=await getChatGPTUser();
+ if(user?.email.trim().toLowerCase()!==ADMIN_EMAIL)return <main id="main" className="wrap page-top"><div className="admin-login panel"><p className="eyebrow">OBOTAN CONSULT / PRIVATE WORKSPACE</p><h1>Admin sign in</h1><p className="lead">Access client requests, meeting reservations and client details.</p>{standalone?(passwordHash()?<AdminLogin/>:<p className="notice">Admin login is awaiting secure password configuration. Client records remain protected.</p>):<a className="cta" href={user?chatGPTSignOutPath('/admin'):chatGPTSignInPath('/admin')}>{user?'Sign out':'Sign in with ChatGPT'}</a>}</div></main>;
+ return <main id="main" className="wrap page-top"><div className="admin-heading"><div><p className="eyebrow">OBOTAN CONSULT / ADMIN</p><h1>Client requests &amp; reservations.</h1><p className="lead">Manage reservations, review client details and track follow-up.</p></div>{standalone?<AdminLogout/>:<a href={chatGPTSignOutPath('/admin')}>Sign out</a>}</div><AdminWorkspace/></main>;
 }

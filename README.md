@@ -13,7 +13,7 @@ Public, account-free client intake with a protected admin workspace for obotanco
 ## Operation
 Clients receive an on-screen confirmation and an optional calendar download. Obotan must contact clients with meeting details. Prefilled Gmail compose links include the service, client name and booking reference. No automatic email delivery, video meeting provider, payments or external calendar integration is configured.
 
-Admin sign-in uses Cloudflare Access on the standalone Worker and ChatGPT identity on Sites. See CLOUDFLARE-SETUP.md for required Access configuration. Sign in with the account whose email is obotanconsult@gmail.com. The production dispatcher owns authentication headers; never expose the raw Worker as an independent public origin without equivalent header validation.
+Admin sign-in uses a locally generated high-entropy password on Cloudflare and ChatGPT identity on Sites. See CLOUDFLARE-SETUP.md for password configuration and reset instructions. Only obotanconsult@gmail.com can access client records.
 
 For privacy requests, use the admin deletion action after verifying the requester. No automatic retention schedule is configured. Clients manually attach documents in Gmail (or their preferred email service) and send them to obotanconsult@gmail.com. Email receipt is not tracked by the website. Deleting a booking does not delete emailed documents. Legacy file columns remain for schema compatibility; existing stored objects are not deleted by this change.
 
@@ -34,6 +34,3 @@ The API tests inject platform headers solely into a loopback test Worker. They m
 - USCIS EB2/NIW: https://www.uscis.gov/policy-manual/volume-6-part-f-chapter-5
 
 Checklists are general information, not exhaustive legal advice. Content and service-scope version: 2026-09-23.
-
-
-
